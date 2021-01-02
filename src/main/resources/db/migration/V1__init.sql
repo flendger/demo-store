@@ -1,0 +1,22 @@
+CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), price int);
+INSERT INTO products (title, price) VALUES
+('product_1', 1),
+('product_2', 2),
+('product_3', 3),
+('product_4', 4),
+('product_5', 5),
+('product_6', 6),
+('product_7', 7),
+('product_8', 8),
+('product_9', 9),
+('product_10', 10),
+('product_11', 11),
+('product_12', 12),
+('product_13', 13),
+('product_14', 14),
+('product_15', 15),
+('product_16', 16),
+('product_17', 17),
+('product_18', 18),
+('product_19', 19),
+('product_20', 20);
