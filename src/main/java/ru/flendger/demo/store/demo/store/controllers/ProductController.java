@@ -1,6 +1,7 @@
 package ru.flendger.demo.store.demo.store.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.flendger.demo.store.demo.store.model.Product;
 import ru.flendger.demo.store.demo.store.services.ProductService;
@@ -17,6 +18,11 @@ public class ProductController {
     @GetMapping
     public List<Product> findAll() {
         return productService.findAll();
+    }
+
+    @GetMapping("/page")
+    public Page<Product> findPage(@RequestParam Integer page, @RequestParam Integer size) {
+        return productService.findAll(page, size);
     }
 
     @PostMapping("/delete")

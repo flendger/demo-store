@@ -34,6 +34,13 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="container" align="center">
+            <button class="btn btn-secondary" ng-click="prevPage()">&lt;&lt;&lt;</button>
+            <span style="font-size: large; color: red; font-family: Arial; font-weight: bold">&emsp;{{currentPage + 1}}&emsp;</span>
+            <button class="btn btn-secondary" ng-click="nextPage()">&gt;&gt;&gt;</button>
+        </div>
+
         <form novalidate ng-submit="submitCreateNewProduct()">
             <h3>Новый товар</h3>
             <div class="form-group col-md-6">
