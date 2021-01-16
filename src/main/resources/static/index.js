@@ -1,5 +1,5 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8189/store';
+    const contextPath = 'http://localhost:8189/store/api/v1';
     const pageSize = 5;
     $scope.currentPage = 0;
     $scope.totalPages = 1;
@@ -18,7 +18,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.fillProducts = function () {
         $http({
-            url: contextPath + '/products/page',
+            url: contextPath + '/products',
             method: 'GET',
             params: {
                 page: $scope.currentPage,
@@ -33,8 +33,8 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.delete = function (id) {
         $http({
-            url: contextPath + '/products/delete',
-            method: 'POST',
+            url: contextPath + '/products',
+            method: 'DELETE',
             params: {
                 id: id
             }
@@ -42,7 +42,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.submitCreateNewProduct = function () {
-        $http.post(contextPath + '/products/add', $scope.newProduct)
+        $http.post(contextPath + '/products', $scope.newProduct)
         .then(function (){
             $scope.newProduct = null;
             $scope.fillProducts();
