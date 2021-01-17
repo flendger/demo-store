@@ -2,6 +2,7 @@ package ru.flendger.demo.store.demo.store.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.flendger.demo.store.demo.store.dto.ProductDto;
 import ru.flendger.demo.store.demo.store.services.ProductService;
@@ -25,12 +26,13 @@ public class ProductController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     ProductDto add(@RequestBody ProductDto productDto) {
         return productService.save(productDto);
     }
 
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping
+    public void delete(@RequestParam Long id) {
         productService.deleteById(id);
     }
 }
