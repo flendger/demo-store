@@ -30,7 +30,12 @@ public class ProductService {
     }
 
     public Optional<ProductDto> saveOrUpdate(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId()).orElse(new Product());
+        Product product;
+        if (productDto.getId() == null) {
+            product = new Product();
+        } else {
+            product = productRepository.findById(productDto.getId()).orElse(new Product());
+        }
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
 
