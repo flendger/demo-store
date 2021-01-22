@@ -11,16 +11,9 @@ public class ProductDto {
     private String title;
     private int price;
 
-    public ProductDto(Product p) {
-        this.id = p.getId();
-        this.title = p.getTitle();
-        this.price = p.getPrice();
-    }
-
-    public ProductDto setByProduct(Product p) {
-        this.id = p.getId();
-        this.title = p.getTitle();
-        this.price = p.getPrice();
-        return this;
+    public ProductDto(Product product) {
+        this.id = product.getId();
+        this.title = product.getTitle();
+        this.price = product.getPrice();
     }
 }
