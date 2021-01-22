@@ -13,8 +13,32 @@
     <title>Products</title>
 </head>
 <body>
-    <div class="container" ng-controller="indexController">
-        <h1>Демо-магазин</h1>
+<div class="container" ng-controller="indexController">
+    <h1>Демо-магазин</h1>
+
+    <form novalidate ng-submit="fillProducts()">
+        <h3>Фильтр</h3>
+        <div class="form-group row">
+            <div class="col">
+                <input class="form-control" type="text" placeholder="Название" ng-model="productFilter.title" id="filterTitle">
+            </div>
+            <div class="col">
+                <input class="form-control" type="number" placeholder="Мин. цена" ng-model="productFilter.minPrice"
+                       id="filterMinPrice">
+            </div>
+            <div class="col">
+                <input class="form-control" type="number" placeholder="Макс. цена" ng-model="productFilter.maxPrice"
+                       id="filterMaxPrice">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button class="btn btn-danger" type="submit">Применить</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="form-group">
         <h3>Список товаров</h3>
         <table cellpadding="0" cellspacing="0" class="table table-hover">
             <thead>
@@ -35,26 +59,31 @@
             </tbody>
         </table>
 
-        <div class="container" align="center">
-            <button class="btn btn-secondary" ng-click="prevPage()">&lt;&lt;&lt;</button>
-            <span style="font-size: large; color: red; font-family: Arial; font-weight: bold">&emsp;{{currentPage + 1}}&emsp;</span>
-            <button class="btn btn-secondary" ng-click="nextPage()">&gt;&gt;&gt;</button>
-        </div>
+    </div>
 
+    <div class="form-group" align="center">
+        <button class="btn btn-secondary" ng-click="prevPage()">&lt;&lt;&lt;</button>
+        <span style="font-size: large; color: red; font-family: Arial; font-weight: bold">&emsp;{{currentPage + 1}}&emsp;</span>
+        <button class="btn btn-secondary" ng-click="nextPage()">&gt;&gt;&gt;</button>
+    </div>
+
+    <div class="form-group">
         <form novalidate ng-submit="submitCreateNewProduct()">
             <h3>Новый товар</h3>
-            <div class="form-group col-md-6">
-                <label for="newProductTitle">Название</label>
-                <input class="form-control" type="text" ng-model="newProduct.title" id="newProductTitle">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="newProductPrice">Цена</label>
-                <input class="form-control" type="number" ng-model="newProduct.price" id="newProductPrice">
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">Добавить</button>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Название" ng-model="newProduct.title" id="newProductTitle">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Цена" ng-model="newProduct.price" id="newProductPrice">
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="submit">Добавить</button>
+                </div>
             </div>
         </form>
+
     </div>
+</div>
 </body>
 </html>

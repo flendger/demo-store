@@ -17,12 +17,16 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.fillProducts = function () {
+        console.log($scope.productFilter);
         $http({
             url: contextPath + '/products',
             method: 'GET',
             params: {
                 page: $scope.currentPage,
-                size: pageSize
+                size: pageSize,
+                min: $scope.productFilter ? $scope.productFilter.minPrice : null,
+                max: $scope.productFilter ? $scope.productFilter.maxPrice : null,
+                title: $scope.productFilter ? $scope.productFilter.title : null
             }
         }).then(function (response) {
             $scope.productList = response.data.content;
