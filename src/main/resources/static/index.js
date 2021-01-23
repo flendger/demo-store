@@ -17,7 +17,6 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.fillProducts = function () {
-        console.log($scope.productFilter);
         $http({
             url: contextPath + '/products',
             method: 'GET',
@@ -47,11 +46,44 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.submitCreateNewProduct = function () {
         $http.post(contextPath + '/products', $scope.newProduct)
-        .then(function (){
-            $scope.newProduct = null;
-            $scope.fillProducts();
+            .then(function (){
+                $scope.newProduct = null;
+                $scope.fillProducts();
+            });
+    }
+
+    $scope.addToCart = function (id) {
+        $http({
+            url: contextPath + '/cart/add',
+            method: 'GET',
+            params: {
+                id: id,
+                quantity: 1
+            }
+        }).then(function () {
+            $scope.fillCart();
         });
     }
 
+    $scope.deleteFromCart = function (id) {
+        $http({
+            url: contextPath + '/cart/delete',
+            method: 'GET',
+            params: {
+                id: id
+            }
+        }).then(function () {
+            $scope.fillCart();
+        });
+    }
+
+    $scope.fillCart = function () {
+        $http.get(contextPath + "/cart")
+            .then(function (response) {
+                $scope.cartList = response.data.items;
+            })
+    }
+
     $scope.fillProducts();
+    $scope.fillCart();
 });

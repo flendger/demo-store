@@ -7,7 +7,6 @@ import ru.flendger.demo.store.demo.store.dto.ProductDto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Component
 public class Cart {
@@ -27,15 +26,16 @@ public class Cart {
 
     public CartItem addItem(ProductDto productDto, int price, int quantity) {
         CartItem item = items.stream()
-                .filter(cartItem -> cartItem.getProductDto().equals(productDto))
+                .filter(cartItem -> cartItem.getProductDto().getId().equals(productDto.getId()))
                 .findFirst()
-                .orElse(((Supplier<CartItem>) () -> {
-                    CartItem newItem = new CartItem(productDto, price, 0);
-                    items.add(newItem);
-                    return newItem;
-                }).get());
+                .orElse(null);
 
-        item.setQuantity(quantity);
+        if (item == null) {
+            item = new CartItem(productDto, price, 0);
+            items.add(item);
+        }
+
+        item.setQuantity(item.getQuantity() + quantity);
         countTotals();
         return item;
     }
