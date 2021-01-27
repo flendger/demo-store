@@ -1,27 +1,17 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/store/api/v1';
     const pageSize = 5;
-    $scope.currentPage = 0;
+    const maxPages = 2;
+    $scope.currentPage = 1;
     $scope.totalPages = 1;
-
-    $scope.prevPage = function () {
-        if ($scope.currentPage === 0) return;
-        $scope.currentPage --;
-        $scope.fillProducts();
-    }
-
-    $scope.nextPage = function () {
-        if ($scope.currentPage + 1 === $scope.totalPages) return;
-        $scope.currentPage ++;
-        $scope.fillProducts();
-    }
+    $scope.firstPage = 1;
 
     $scope.fillProducts = function () {
         $http({
             url: contextPath + '/products',
             method: 'GET',
             params: {
-                page: $scope.currentPage,
+                page: $scope.currentPage-1,
                 size: pageSize,
                 min: $scope.productFilter ? $scope.productFilter.minPrice : null,
                 max: $scope.productFilter ? $scope.productFilter.maxPrice : null,
@@ -29,8 +19,9 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             }
         }).then(function (response) {
             $scope.productList = response.data.content;
-            $scope.currentPage = response.data.number;
+            $scope.currentPage = response.data.number + 1;
             $scope.totalPages = response.data.totalPages;
+            $scope.fillPages()
         })
     }
 
@@ -82,6 +73,43 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             .then(function (response) {
                 $scope.cartList = response.data.items;
             })
+    }
+
+    $scope.fillPages = function () {
+        let printPages = [];
+        let mPages = Math.min(maxPages, $scope.totalPages);
+        for (let i = 0; i < mPages; i++) {
+            printPages.push(i + $scope.firstPage);
+        }
+
+        $scope.printPages = printPages;
+    }
+
+    $scope.toPage = function (page) {
+        $scope.currentPage = page;
+        $scope.fillProducts();
+    }
+
+    $scope.prevPages = function () {
+        if ($scope.firstPage === 1) return;
+        $scope.firstPage --;
+        if ($scope.currentPage > $scope.getLastPage()) {
+            $scope.currentPage = $scope.getLastPage();
+        }
+        $scope.fillProducts();
+    }
+
+    $scope.nextPages = function () {
+        if ($scope.getLastPage() === $scope.totalPages) return;
+        $scope.firstPage ++;
+        if ($scope.currentPage < $scope.firstPage) {
+            $scope.currentPage = $scope.firstPage;
+        }
+        $scope.fillProducts();
+    }
+
+    $scope.getLastPage = function() {
+        return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
     $scope.fillProducts();

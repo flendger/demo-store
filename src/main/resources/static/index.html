@@ -61,11 +61,19 @@
         </table>
     </div>
 
-    <div class="form-group" align="center">
-        <button class="btn btn-secondary" ng-click="prevPage()">&lt;&lt;&lt;</button>
-        <span style="font-size: large; color: red; font-family: Arial; font-weight: bold">&emsp;{{currentPage + 1}}&emsp;</span>
-        <button class="btn btn-secondary" ng-click="nextPage()">&gt;&gt;&gt;</button>
-    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            <li class="page-item" ng-class="firstPage === 1 ? 'disabled' : ''">
+                <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="prevPages()">Пред.</a>
+            </li>
+            <li class="page-item" ng-class="page === currentPage ? 'active' : ''" ng-repeat="page in printPages">
+                <a class="page-link" ng-click="toPage(page)">{{page}}</a>
+            </li>
+            <li class="page-item" ng-class="getLastPage() === totalPages ? 'disabled' : ''">
+                <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="nextPages()">След.</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="form-group">
         <h3>Корзина</h3>

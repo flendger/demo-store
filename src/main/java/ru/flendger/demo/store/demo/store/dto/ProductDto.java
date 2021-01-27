@@ -12,8 +12,13 @@ public class ProductDto {
     private int price;
 
     public ProductDto(Product product) {
+        formProduct(product);
+    }
+
+    public ProductDto formProduct(Product product) {
         this.id = product.getId();
         this.title = product.getTitle();
         this.price = product.getPrice();
+        return this;
     }
 }

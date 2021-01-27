@@ -33,7 +33,7 @@ public class ProductController {
     @PutMapping
     public ProductDto save(@RequestBody ProductDto productDto) {
         //todo: add error
-        return productService.saveOrUpdate(productDto).orElse(null);
+        return productService.saveOrUpdate(productDto);
     }
 
     @PostMapping
@@ -41,7 +41,7 @@ public class ProductController {
     public ProductDto add(@RequestBody ProductDto productDto) {
         productDto.setId(null);
         //todo: add error
-        return productService.saveOrUpdate(productDto).orElse(null);
+        return productService.saveOrUpdate(productDto);
     }
 
     @DeleteMapping

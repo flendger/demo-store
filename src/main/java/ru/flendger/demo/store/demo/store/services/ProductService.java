@@ -29,7 +29,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Optional<ProductDto> saveOrUpdate(ProductDto productDto) {
+    public ProductDto saveOrUpdate(ProductDto productDto) {
         Product product;
         if (productDto.getId() == null) {
             product = new Product();
@@ -39,7 +39,6 @@ public class ProductService {
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
 
-        //todo: return new productDTO???
-        return Optional.of(productRepository.save(product)).map(ProductDto::new);
+        return productDto.formProduct(productRepository.save(product));
     }
 }
