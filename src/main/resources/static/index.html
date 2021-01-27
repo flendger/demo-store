@@ -16,7 +16,7 @@
 <div class="container" ng-controller="indexController">
     <h1>Демо-магазин</h1>
 
-    <form novalidate ng-submit="fillProducts()">
+    <form novalidate ng-submit="filterProducts()">
         <h3>Фильтр</h3>
         <div class="form-group row">
             <div class="col">
@@ -62,7 +62,6 @@
     </div>
 
     <nav aria-label="Page navigation example">
-<!--        todo: issue when do product filter-->
         <ul class="pagination justify-content-end">
             <li class="page-item" ng-class="firstPage === 1 ? 'disabled' : ''">
                 <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="prevPages()">Пред.</a>
@@ -70,7 +69,7 @@
             <li class="page-item" ng-class="page === currentPage ? 'active' : ''" ng-repeat="page in printPages">
                 <a class="page-link" ng-click="toPage(page)">{{page}}</a>
             </li>
-            <li class="page-item" ng-class="getLastPage() === totalPages ? 'disabled' : ''">
+            <li class="page-item" ng-class="getLastPage() >= totalPages ? 'disabled' : ''">
                 <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="nextPages()">След.</a>
             </li>
         </ul>
@@ -91,11 +90,22 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in cartList">
-                    <!--                todo: add rowNum-->
-                    <td></td>
+                    <th class="text-center" scope="row">{{$index + 1}}</th>
                     <td>{{item.productDto.title}}</td>
                     <td align="center">{{item.price}}</td>
-                    <td align="center">{{item.quantity}}</td>
+                    <td class="row justify-content-center">
+                        <div class="input-group mb-3 row justify-content-center">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" type="button" ng-click="addToCart(item.productDto.id, 1)">+</button>
+                            </div>
+                            <div class="input-group-text">{{item.quantity}}</div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" ng-click="decFromCart(item.productDto.id, 1)">&#8211;</button>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!--                    <td align="center">{{item.quantity}}</td>-->
                     <td align="center">{{item.sum}}</td>
                     <td align="center">
                         <button class="btn btn-danger" ng-click="deleteFromCart(item.productDto.id)">Удалить</button>

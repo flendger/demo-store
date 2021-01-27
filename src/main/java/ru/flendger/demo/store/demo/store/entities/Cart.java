@@ -61,9 +61,11 @@ public class Cart {
         int newQuantity = item.getQuantity() - quantity;
         if (newQuantity <= 0) {
             items.remove(item);
+            countTotals();
             return Optional.empty();
         }
         item.setQuantity(newQuantity);
+        countTotals();
         return Optional.of(item);
     }
 

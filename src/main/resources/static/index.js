@@ -1,7 +1,7 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/store/api/v1';
     const pageSize = 5;
-    const maxPages = 2;
+    const maxPages = 8;
     $scope.currentPage = 1;
     $scope.totalPages = 1;
     $scope.firstPage = 1;
@@ -20,9 +20,17 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         }).then(function (response) {
             $scope.productList = response.data.content;
             $scope.currentPage = response.data.number + 1;
+            if ($scope.firstPage > $scope.currentPage) {
+                $scope.firstPage = $scope.currentPage;
+            }
             $scope.totalPages = response.data.totalPages;
             $scope.fillPages()
         })
+    }
+
+    $scope.filterProducts = function () {
+        $scope.currentPage = 1;
+        $scope.fillProducts();
     }
 
     $scope.delete = function (id) {
@@ -43,13 +51,26 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             });
     }
 
-    $scope.addToCart = function (id) {
+    $scope.addToCart = function (id, quantity) {
         $http({
             url: contextPath + '/cart/add',
             method: 'GET',
             params: {
                 id: id,
-                quantity: 1
+                quantity: quantity
+            }
+        }).then(function () {
+            $scope.fillCart();
+        });
+    }
+
+    $scope.decFromCart = function (id, quantity) {
+        $http({
+            url: contextPath + '/cart/remove',
+            method: 'GET',
+            params: {
+                id: id,
+                quantity: quantity
             }
         }).then(function () {
             $scope.fillCart();
@@ -102,7 +123,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.nextPages = function () {
-        if ($scope.getLastPage() === $scope.totalPages) return;
+        if ($scope.getLastPage() >= $scope.totalPages) return;
         $scope.firstPage ++;
         if ($scope.currentPage < $scope.firstPage) {
             $scope.currentPage = $scope.firstPage;

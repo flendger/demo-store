@@ -26,7 +26,6 @@ public class CartController {
     }
 
     //todo: product price move to independent table with date of price (price-list)
-    //todo: add +/- quantity to cart view
 
     @GetMapping("/add")
     public CartItemDto addItem(@RequestParam Long id,
