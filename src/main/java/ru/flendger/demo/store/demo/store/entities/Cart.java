@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class Cart {
@@ -47,9 +48,28 @@ public class Cart {
         return item;
     }
 
-    public void deleteItem(Product product) {
+    public Optional<CartItem> removeItem(Long id, Integer quantity) {
         CartItem item = items.stream()
-                .filter(cartItem -> cartItem.getProduct().getId().equals(product.getId()))
+                .filter(cartItem -> cartItem.getProduct().getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (item == null) {
+            return Optional.empty();
+        }
+
+        int newQuantity = item.getQuantity() - quantity;
+        if (newQuantity <= 0) {
+            items.remove(item);
+            return Optional.empty();
+        }
+        item.setQuantity(newQuantity);
+        return Optional.of(item);
+    }
+
+    public void deleteItem(Long id) {
+        CartItem item = items.stream()
+                .filter(cartItem -> cartItem.getProduct().getId().equals(id))
                 .findFirst()
                 .orElse(null);
         if (item == null) return;

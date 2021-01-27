@@ -72,6 +72,8 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         $http.get(contextPath + "/cart")
             .then(function (response) {
                 $scope.cartList = response.data.items;
+                $scope.cartQuantity = response.data.quantity;
+                $scope.cartSum = response.data.sum;
             })
     }
 
