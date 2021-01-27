@@ -1,21 +1,20 @@
-package ru.flendger.demo.store.demo.store.model;
+package ru.flendger.demo.store.demo.store.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.flendger.demo.store.demo.store.dto.ProductDto;
+import ru.flendger.demo.store.demo.store.model.Product;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class CartItem {
-    private ProductDto productDto;
+    private Product product;
     private int quantity;
     private int price;
     private int sum;
 
-    public CartItem(ProductDto productDto, int price, int quantity) {
-        this.productDto = productDto;
+    public CartItem(Product product, int price, int quantity) {
+        this.product = product;
         this.quantity = quantity;
         this.price = price;
         this.sum = price * quantity;
