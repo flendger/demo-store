@@ -25,8 +25,6 @@ public class CartController {
         return new CartDto(cart);
     }
 
-    //todo: product price move to independent table with date of price (price-list)
-
     @GetMapping("/add")
     public CartItemDto addItem(@RequestParam Long id,
                             @RequestParam(defaultValue = "1") Integer quantity) {

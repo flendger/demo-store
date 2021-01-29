@@ -50,10 +50,10 @@
             </thead>
             <tbody>
             <tr ng-repeat="p in productList">
-                <td>{{p.title}}</td>
+                <td>{{p.productDto.title}}</td>
                 <td>{{p.price}}</td>
                 <td align="right">
-                    <button class="btn btn-success" ng-click="addToCart(p.id)">В корзину</button>
+                    <button class="btn btn-success" ng-click="addToCart(p.productDto.id)">В корзину</button>
 <!--                    <button class="btn btn-danger" ng-click="delete(p.id)">Удалить</button>-->
                 </td>
             </tr>
