@@ -1,12 +1,8 @@
 package ru.flendger.demo.store.demo.store.entities;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.flendger.demo.store.demo.store.dto.ProductDto;
-import ru.flendger.demo.store.demo.store.exeptions.ResourceNotFoundException;
 import ru.flendger.demo.store.demo.store.model.Product;
-import ru.flendger.demo.store.demo.store.services.ProductService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

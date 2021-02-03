@@ -8,7 +8,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.fillProducts = function () {
         $http({
-            url: contextPath + '/prices',
+            url: contextPath + '/products',
             method: 'GET',
             params: {
                 page: $scope.currentPage-1,

@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ru.flendger.demo.store.demo.store.entities.PriceItem;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -25,6 +23,9 @@ public class Product {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "price")
+    private int price;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -32,11 +33,4 @@ public class Product {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public int getPrice() {
-        return 0;
-    }
-
-    public void setPrice(int price) {
-    }
 }

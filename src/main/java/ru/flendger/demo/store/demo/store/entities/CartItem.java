@@ -2,7 +2,6 @@ package ru.flendger.demo.store.demo.store.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.flendger.demo.store.demo.store.dto.ProductDto;
 import ru.flendger.demo.store.demo.store.model.Product;
 
 @Data
