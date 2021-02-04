@@ -1,14 +1,31 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8189/store/api/v1';
+    const contextPath = 'http://localhost:8189/store';
     const pageSize = 5;
     const maxPages = 8;
     $scope.currentPage = 1;
     $scope.totalPages = 1;
     $scope.firstPage = 1;
+    $scope.authorized = false;
+    $scope.isShowAuth = false;
+
+    $scope.tryToAuth = function () {
+        $http.post(contextPath + '/auth', $scope.user)
+            .then(function successCallback(response) {
+                if (response.data.token) {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    $scope.user.username = null;
+                    $scope.user.password = null;
+                    $scope.authorized = true;
+                    $scope.fillCart();
+                }
+            }, function errorCallback() {
+                window.alert("Error");
+            });
+    };
 
     $scope.fillProducts = function () {
         $http({
-            url: contextPath + '/products',
+            url: contextPath + '/api/v1/products',
             method: 'GET',
             params: {
                 page: $scope.currentPage-1,
@@ -35,7 +52,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.delete = function (id) {
         $http({
-            url: contextPath + '/products',
+            url: contextPath + '/api/v1/products',
             method: 'DELETE',
             params: {
                 id: id
@@ -44,7 +61,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.submitCreateNewProduct = function () {
-        $http.post(contextPath + '/products', $scope.newProduct)
+        $http.post(contextPath + '/api/v1/products', $scope.newProduct)
             .then(function (){
                 $scope.newProduct = null;
                 $scope.fillProducts();
@@ -53,7 +70,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.addToCart = function (id, quantity) {
         $http({
-            url: contextPath + '/cart/add',
+            url: contextPath + '/api/v1/cart/add',
             method: 'GET',
             params: {
                 id: id,
@@ -66,7 +83,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.decFromCart = function (id, quantity) {
         $http({
-            url: contextPath + '/cart/remove',
+            url: contextPath + '/api/v1/cart/remove',
             method: 'GET',
             params: {
                 id: id,
@@ -79,7 +96,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.deleteFromCart = function (id) {
         $http({
-            url: contextPath + '/cart/delete',
+            url: contextPath + '/api/v1/cart/delete',
             method: 'GET',
             params: {
                 id: id
@@ -90,7 +107,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.fillCart = function () {
-        $http.get(contextPath + "/cart")
+        $http.get(contextPath + "/api/v1/cart")
             .then(function (response) {
                 $scope.cartList = response.data.items;
                 $scope.cartQuantity = response.data.quantity;
@@ -135,6 +152,9 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
+    $scope.getOrder = function () {
+
+    }
+
     $scope.fillProducts();
-    $scope.fillCart();
 });
