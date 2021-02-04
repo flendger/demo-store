@@ -1,4 +1,4 @@
-package ru.flendger.demo.store.demo.store.entities;
+package ru.flendger.demo.store.demo.store.bean;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;

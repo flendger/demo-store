@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.flendger.demo.store.demo.store.dto.CartDto;
 import ru.flendger.demo.store.demo.store.dto.CartItemDto;
-import ru.flendger.demo.store.demo.store.entities.Cart;
+import ru.flendger.demo.store.demo.store.bean.Cart;
 import ru.flendger.demo.store.demo.store.exeptions.ResourceNotFoundException;
 import ru.flendger.demo.store.demo.store.model.Product;
 import ru.flendger.demo.store.demo.store.services.ProductService;

@@ -95,12 +95,12 @@
                     <td align="center">{{item.price}}</td>
                     <td class="row justify-content-center">
                         <div class="input-group mb-3 row justify-content-center">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-secondary" type="button" ng-click="addToCart(item.productDto.id, 1)">+</button>
-                            </div>
-                            <div class="input-group-text">{{item.quantity}}</div>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button" ng-click="decFromCart(item.productDto.id, 1)">&#8211;</button>
+                            </div>
+                            <div class="input-group-text">{{item.quantity}}</div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" type="button" ng-click="addToCart(item.productDto.id, 1)">+</button>
                             </div>
                         </div>
                     </td>

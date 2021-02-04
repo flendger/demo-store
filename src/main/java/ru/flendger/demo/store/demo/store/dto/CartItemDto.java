@@ -1,7 +1,7 @@
 package ru.flendger.demo.store.demo.store.dto;
 
 import lombok.Data;
-import ru.flendger.demo.store.demo.store.entities.CartItem;
+import ru.flendger.demo.store.demo.store.bean.CartItem;
 
 @Data
 public class CartItemDto {
