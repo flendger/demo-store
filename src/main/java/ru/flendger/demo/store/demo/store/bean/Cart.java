@@ -1,13 +1,20 @@
 package ru.flendger.demo.store.demo.store.bean;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import ru.flendger.demo.store.demo.store.exeptions.CartEmptyException;
+import ru.flendger.demo.store.demo.store.model.Order;
+import ru.flendger.demo.store.demo.store.model.OrderItem;
 import ru.flendger.demo.store.demo.store.model.Product;
+import ru.flendger.demo.store.demo.store.model.User;
+import ru.flendger.demo.store.demo.store.services.OrderService;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,13 +22,15 @@ import java.util.Optional;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@RequiredArgsConstructor
 public class Cart {
+    private final OrderService orderService;
+
     private List<CartItem> items;
     @Getter
     private int quantity;
     @Getter
     private int sum;
-
 
     public List<CartItem> getItems() {
         return Collections.unmodifiableList(items);
@@ -86,5 +95,39 @@ public class Cart {
             sum += cartItem.getSum();
             quantity += cartItem.getQuantity();
         });
+    }
+
+    public void clear() {
+        items.clear();
+        countTotals();
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    public Order placeOrder(User user) {
+        if (isEmpty()) {
+            throw new CartEmptyException("The cart is empty");
+        }
+
+        Order order = new Order();
+        order.setDate(LocalDateTime.now());
+        order.setUser(user);
+        order.setSum(sum);
+        order.setOrderItems(new ArrayList<>());
+
+        items.forEach(cartItem -> {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProduct(cartItem.getProduct());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setPrice(cartItem.getPrice());
+            orderItem.setSum(cartItem.getSum());
+            order.getOrderItems().add(orderItem);
+        });
+
+        clear();
+        return orderService.save(order);
     }
 }

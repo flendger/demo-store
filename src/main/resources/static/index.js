@@ -7,12 +7,14 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     $scope.firstPage = 1;
     $scope.authorized = false;
     $scope.isShowAuth = false;
+    $scope.username = "";
 
     $scope.tryToAuth = function () {
         $http.post(contextPath + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    $scope.username = $scope.user.username;
                     $scope.user.username = null;
                     $scope.user.password = null;
                     $scope.authorized = true;
@@ -106,6 +108,13 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     }
 
+    $scope.clearCart = function () {
+        $http.get(contextPath + "/api/v1/cart/clear")
+            .then(function () {
+                $scope.fillCart();
+            })
+    }
+
     $scope.fillCart = function () {
         $http.get(contextPath + "/api/v1/cart")
             .then(function (response) {
@@ -152,8 +161,17 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
-    $scope.getOrder = function () {
-
+    $scope.placeOrder = function () {
+        $http.post(contextPath + "/api/v1/orders")
+            .then(function (response) {
+                window.alert(
+                    "Order has been placed: \r\n" +
+                     "id: " + response.data.id + "\r\n" +
+                     "date: " + response.data.date + "\r\n" +
+                    "sum: " + response.data.sum
+                );
+                $scope.fillCart();
+            })
     }
 
     $scope.fillProducts();
