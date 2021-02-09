@@ -9,6 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
     <script src="index.js"></script>
     <title>Products</title>
 </head>
@@ -20,7 +21,7 @@
             <a class="btn btn-outline-success my-2 my-sm-0" ng-click="isShowAuth=!isShowAuth">Войти</a>
         </div>
         <div class="form-inline" ng-show="authorized">
-            <a class="btn btn-outline-success my-2 my-sm-0" href="#">{{username}}</a>
+            <a class="btn btn-outline-success my-2 my-sm-0" ng-click="logout()">Выйти</a>
         </div>
     </nav>
 
