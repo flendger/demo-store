@@ -16,4 +16,20 @@ public class ExceptionControllerAdvice {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    ResponseEntity<?> handleUnauthorizedException(UnauthorizedException exception) {
+        log.error(exception.getMessage());
+
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    ResponseEntity<?> handleCartEmptyException(CartEmptyException exception) {
+        log.error(exception.getMessage());
+
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    }
 }

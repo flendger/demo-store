@@ -1,7 +1,7 @@
 package ru.flendger.demo.store.demo.store.dto;
 
 import lombok.Data;
-import ru.flendger.demo.store.demo.store.entities.Cart;
+import ru.flendger.demo.store.demo.store.bean.Cart;
 
 import java.util.List;
 import java.util.stream.Collectors;
