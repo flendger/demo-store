@@ -65,12 +65,22 @@ VALUES ('product_1', 1),
        ('product_19', 19),
        ('product_20', 20);
 
+CREATE TABLE order_addresses
+(
+    id         bigserial PRIMARY KEY,
+    user_id    bigint       not null references users (id),
+    address    varchar(255) not null,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
+);
+
 CREATE TABLE orders
 (
     id         bigserial PRIMARY KEY,
     date       date   not null,
     user_id    bigint not null references users (id),
     sum        int       default 0,
+    address_id bigint not null references order_addresses (id),
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
 );

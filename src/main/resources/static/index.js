@@ -6,7 +6,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     $scope.totalPages = 1;
     $scope.firstPage = 1;
     $scope.authorized = false;
-    $scope.isShowAuth = false;
 
     $scope.tryToAuth = function () {
         $http.post(contextPath + '/auth', $scope.user)
@@ -22,6 +21,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                     $scope.fillCart();
                 }
             }, function errorCallback() {
+                // $('#regModal').modal('show'); todo: change notification to modal bootstrap forms
                 window.alert("Error");
             });
     };
@@ -31,6 +31,32 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         delete $localStorage.demoStoreToken;
         delete $localStorage.demoStoreUsername;
         $scope.authorized = false;
+    }
+
+    $scope.regUser = function () {
+        $http.post(contextPath + '/reg', $scope.newUser)
+            .then(function successCallback() {
+                $http.post(contextPath + '/auth', $scope.newUser)
+                    .then(function successCallback(response) {
+                        if (response.data.token) {
+                            let receivedToken = 'Bearer ' + response.data.token;
+                            $http.defaults.headers.common.Authorization = receivedToken;
+                            $localStorage.demoStoreUsername = $scope.newUser.username;
+                            $localStorage.demoStoreToken = receivedToken;
+                            $scope.newUser.username = null;
+                            $scope.newUser.password = null;
+                            $scope.newUser.email = null;
+                            $scope.authorized = true;
+                            $scope.fillCart();
+                        }
+                    }, function errorCallback() {
+                        // $('#regModal').modal('show'); todo: change notification to modal bootstrap forms
+                        window.alert("Error auth");
+                    });
+            }, function errorCallback() {
+                // $('#regModal').modal('show'); todo: change notification to modal bootstrap forms
+                window.alert("Error reg");
+            });
     }
 
     $scope.fillProducts = function () {
