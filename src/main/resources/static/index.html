@@ -88,6 +88,31 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addressModalLabel">Доставка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputAddress" class="col-form-label">Адрес:</label>
+                            <textarea class="form-control" ng-model="address.address" id="inputAddress" placeholder="address"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    <button type="submit" ng-click="placeOrder()" data-dismiss="modal" class="btn btn-primary">Оформить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form novalidate ng-submit="filterProducts()">
         <h5>Фильтр</h5>
         <div class="form-group row">
@@ -194,7 +219,7 @@
                 <tr>
                     <td colspan="5" class="text-right"></td>
                     <td class="text-center">
-                        <button class="btn btn-primary" ng-click="placeOrder()">Оформить</button>
+                        <button class="btn btn-primary" ng-click="inputAddress()">Оформить</button>
                     </td>
                 </tr>
             </tbody>

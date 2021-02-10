@@ -195,9 +195,14 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
+    $scope.inputAddress = function () {
+        $('#addressModal').modal('show');
+    }
+
     $scope.placeOrder = function () {
-        $http.post(contextPath + "/api/v1/orders")
-            .then(function (response) {
+        $http.post(contextPath + "/api/v1/orders", $scope.address)
+            .then(function successCallback(response) {
+                $scope.address = null;
                 window.alert(
                     "Order has been placed: \r\n" +
                      "id: " + response.data.id + "\r\n" +
@@ -205,6 +210,8 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                     "sum: " + response.data.sum
                 );
                 $scope.fillCart();
+            }, function errorCallback(response) {
+                console.log(response);
             })
     }
 

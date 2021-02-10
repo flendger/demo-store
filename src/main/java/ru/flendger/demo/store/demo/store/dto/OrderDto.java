@@ -12,10 +12,12 @@ public class OrderDto {
     private Long id;
     private LocalDateTime date;
     private int sum;
+    private OrderAddressDto orderAddressDto;
 
     public OrderDto(Order order) {
         this.id = order.getId();
         this.date = order.getDate();
         this.sum = order.getSum();
+        this.orderAddressDto = new OrderAddressDto(order.getOrderAddress());
     }
 }
