@@ -31,14 +31,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> placeOrder(Principal principal, @RequestBody OrderAddressDto address) {
+    public ResponseEntity<?> placeOrder(Principal principal, @RequestBody(required = false) OrderAddressDto address) {
         if (principal == null) {
             throw new UnauthorizedException("You must login");
         }
 
         if (address == null || address.getAddress().isBlank()) {
             return new ResponseEntity<>(
-                    new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Address is blank"),
+                    new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Необходимо заполнить адрес"),
                     HttpStatus.BAD_REQUEST);
         }
 
