@@ -1,13 +1,13 @@
 package ru.flendger.demo.store.demo.store.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.flendger.demo.store.demo.store.bean.Cart;
+import ru.flendger.demo.store.demo.store.dto.OrderAddressDto;
 import ru.flendger.demo.store.demo.store.dto.OrderDto;
+import ru.flendger.demo.store.demo.store.exeptions.ErrorMessage;
 import ru.flendger.demo.store.demo.store.exeptions.UnauthorizedException;
 import ru.flendger.demo.store.demo.store.model.User;
 import ru.flendger.demo.store.demo.store.services.OrderService;
@@ -31,11 +31,18 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> placeOrder(Principal principal) {
+    public ResponseEntity<?> placeOrder(Principal principal, @RequestBody OrderAddressDto address) {
         if (principal == null) {
             throw new UnauthorizedException("You must login");
         }
+
+        if (address == null || address.getAddress().isBlank()) {
+            return new ResponseEntity<>(
+                    new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Address is blank"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new UnauthorizedException("You must login"));
-        return ResponseEntity.ok(new OrderDto(cart.placeOrder(user)));
+        return ResponseEntity.ok(new OrderDto(cart.placeOrder(user, address)));
     }
 }

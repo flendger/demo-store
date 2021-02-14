@@ -9,32 +9,128 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
     <script src="index.js"></script>
     <title>Products</title>
 </head>
 <body>
 <div class="container" ng-controller="indexController">
     <nav class="navbar navbar-light bg-light">
-        <h2 class="navbar-brand">Демо-магазин</h2>
+        <h1 class="navbar-brand">Демо-магазин</h1>
         <div class="form-inline" ng-show="!authorized">
-            <a class="btn btn-outline-success my-2 my-sm-0" ng-click="isShowAuth=!isShowAuth">Войти</a>
+            <button type="button" class="btn btn-outline-success mr-sm-2" data-toggle="modal" data-target="#authModal" data-whatever="@auth">Войти</button>
+            <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#regModal" data-whatever="@reg">Регистрация</button>
         </div>
         <div class="form-inline" ng-show="authorized">
-            <a class="btn btn-outline-success my-2 my-sm-0" href="#">{{username}}</a>
+            <button class="btn btn-outline-success my-2 mr-sm-2" ng-click="">{{username}}</button>
+            <button type="button" class="btn btn-outline-success my-2 my-sm-0" ng-click="logout()">Выйти</button>
         </div>
     </nav>
 
-    <div class="mb-3 text-center" ng-show="isShowAuth && !authorized">
-        <form class="form-signin" ng-submit="tryToAuth()" style="max-width: 350px; padding: 15px; margin: 0 auto;">
-            <h1 class="h3 mb-3 font-weight-normal">Авторизуйтесь</h1>
-            <label for="inputUsername" class="sr-only">Имя пользователя</label>
-            <input type="text" ng-model="user.username" id="inputUsername" class="form-control"
-                   placeholder="Имя пользователя" style="margin-bottom: 10px;" required="">
-            <label for="inputPassword" class="sr-only">Пароль</label>
-            <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="Пароль"
-                   style="margin-bottom: 10px;" required="">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-        </form>
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Авторизация</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-form-label">Имя пользователя:</label>
+                            <input type="text" class="form-control" ng-model="user.username" id="inputUsername" placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-form-label">Пароль:</label>
+                            <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" ng-click="tryToAuth()" data-dismiss="modal" class="btn btn-primary">Войти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="regModal" tabindex="-1" aria-labelledby="regModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="regModalLabel">Регистрация</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputNewUsername" class="col-form-label">Имя пользователя:</label>
+                            <input type="text" class="form-control" ng-model="newUser.username" id="inputNewUsername" placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputNewEmail" class="col-form-label">Эл. почта:</label>
+                            <input type="email" class="form-control" ng-model="newUser.email" id="inputNewEmail" placeholder="e-mail">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputNewPassword" class="col-form-label">Пароль:</label>
+                            <input type="password" ng-model="newUser.password" id="inputNewPassword" class="form-control" placeholder="password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" ng-click="regUser()" data-dismiss="modal" class="btn btn-primary">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addressModalLabel">Доставка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputAddress" class="col-form-label">Адрес:</label>
+                            <textarea class="form-control" ng-model="address.address" id="inputAddress" placeholder="address"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    <button type="submit" ng-click="placeOrder()" data-dismiss="modal" class="btn btn-primary">Оформить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Информация</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="info-text"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <form novalidate ng-submit="filterProducts()">
@@ -143,7 +239,7 @@
                 <tr>
                     <td colspan="5" class="text-right"></td>
                     <td class="text-center">
-                        <button class="btn btn-primary" ng-click="placeOrder()">Оформить</button>
+                        <button class="btn btn-primary" ng-click="inputAddress()">Оформить</button>
                     </td>
                 </tr>
             </tbody>
@@ -151,7 +247,7 @@
     </div>
 
     <!--    <div class="form-group">-->
-<!--        <form novalidate ng-submit="submitCreateNewProduct()">-->
+<!--        <form novalidate ng-submit="submitCreate`New`Product()">-->
 <!--            <h3>Новый товар</h3>-->
 <!--            <div class="form-row">-->
 <!--                <div class="col-md-4">-->

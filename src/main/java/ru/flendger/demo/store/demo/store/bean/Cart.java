@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import ru.flendger.demo.store.demo.store.dto.OrderAddressDto;
 import ru.flendger.demo.store.demo.store.exeptions.CartEmptyException;
-import ru.flendger.demo.store.demo.store.model.Order;
-import ru.flendger.demo.store.demo.store.model.OrderItem;
-import ru.flendger.demo.store.demo.store.model.Product;
-import ru.flendger.demo.store.demo.store.model.User;
+import ru.flendger.demo.store.demo.store.model.*;
 import ru.flendger.demo.store.demo.store.services.OrderService;
 
 import javax.annotation.PostConstruct;
@@ -106,7 +104,7 @@ public class Cart {
         return items.isEmpty();
     }
 
-    public Order placeOrder(User user) {
+    public Order placeOrder(User user, OrderAddressDto orderAddressDto) {
         if (isEmpty()) {
             throw new CartEmptyException("The cart is empty");
         }
@@ -115,6 +113,8 @@ public class Cart {
         order.setDate(LocalDateTime.now());
         order.setUser(user);
         order.setSum(sum);
+        order.setOrderAddress(new OrderAddress(user, orderAddressDto.getAddress()));
+
         order.setOrderItems(new ArrayList<>());
 
         items.forEach(cartItem -> {

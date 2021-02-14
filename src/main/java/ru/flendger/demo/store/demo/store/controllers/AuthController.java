@@ -12,9 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.flendger.demo.store.demo.store.dto.JwtRequest;
 import ru.flendger.demo.store.demo.store.dto.JwtResponse;
+import ru.flendger.demo.store.demo.store.dto.RegRequest;
+import ru.flendger.demo.store.demo.store.dto.UserDto;
 import ru.flendger.demo.store.demo.store.exeptions.ErrorMessage;
+import ru.flendger.demo.store.demo.store.model.User;
 import ru.flendger.demo.store.demo.store.services.UserService;
 import ru.flendger.demo.store.demo.store.utils.JwtTokenUtil;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,5 +39,27 @@ public class AuthController {
         UserDetails userDetails = userService.loadUserByUsername(jwtRequest.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @PostMapping("/reg")
+    public ResponseEntity<?> regUser(@RequestBody RegRequest regRequest, Principal principal) {
+        if (principal != null) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "You must logout before registration"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (regRequest.getUsername().isBlank() || regRequest.getPassword().isBlank() || regRequest.getEmail().isBlank()) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Username, password or email is blank"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (userService.findByUsername(regRequest.getUsername()).isPresent()) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "User already exists"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (userService.findUserByEmail(regRequest.getEmail()).isPresent()) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Email already exists"), HttpStatus.BAD_REQUEST);
+        }
+
+        User user = new User(regRequest.getUsername(), regRequest.getPassword(), regRequest.getEmail());
+        return ResponseEntity.ok(new UserDto(userService.createUser(user)));
     }
 }

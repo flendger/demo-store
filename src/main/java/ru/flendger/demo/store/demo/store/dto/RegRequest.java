@@ -1,13 +1,10 @@
 package ru.flendger.demo.store.demo.store.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class JwtRequest {
+public class RegRequest {
     private String username;
     private String password;
+    private String email;
 }

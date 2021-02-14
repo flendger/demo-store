@@ -1,4 +1,5 @@
-angular.module('app', []).controller('indexController', function ($scope, $http) {
+angular.module('app', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
+
     const contextPath = 'http://localhost:8189/store';
     const pageSize = 5;
     const maxPages = 8;
@@ -6,14 +7,17 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     $scope.totalPages = 1;
     $scope.firstPage = 1;
     $scope.authorized = false;
-    $scope.isShowAuth = false;
     $scope.username = "";
+    var msgTxt = "";
 
     $scope.tryToAuth = function () {
         $http.post(contextPath + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
-                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    let receivedToken = 'Bearer ' + response.data.token;
+                    $http.defaults.headers.common.Authorization = receivedToken;
+                    $localStorage.demoStoreUsername = $scope.user.username;
+                    $localStorage.demoStoreToken = receivedToken;
                     $scope.username = $scope.user.username;
                     $scope.user.username = null;
                     $scope.user.password = null;
@@ -21,9 +25,38 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                     $scope.fillCart();
                 }
             }, function errorCallback() {
-                window.alert("Error");
+                msgTxt = "Authentication error";
+                $('#infoModal').modal('show');
             });
     };
+
+    $scope.logout = function () {
+        $http.defaults.headers.common.Authorization = null;
+        delete $localStorage.demoStoreToken;
+        delete $localStorage.demoStoreUsername;
+        $scope.username = null;
+        $scope.authorized = false;
+    }
+
+    $scope.regUser = function () {
+        $http.post(contextPath + '/reg', $scope.newUser)
+            .then(function successCallback() {
+                $scope.user.username = $scope.newUser.username;
+                $scope.user.password = $scope.newUser.password;
+                $scope.newUser.username = null;
+                $scope.newUser.password = null;
+                $scope.newUser.email = null;
+                $scope.tryToAuth();
+            }, function errorCallback() {
+                msgTxt = "Registration error";
+                $('#infoModal').modal('show');
+            });
+    }
+
+    $('#infoModal').on('show.bs.modal', function () {
+        var modal = $(this)
+        modal.find('.info-text').text(msgTxt)
+    })
 
     $scope.fillProducts = function () {
         $http({
@@ -161,9 +194,14 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
+    $scope.inputAddress = function () {
+        $('#addressModal').modal('show');
+    }
+
     $scope.placeOrder = function () {
-        $http.post(contextPath + "/api/v1/orders")
-            .then(function (response) {
+        $http.post(contextPath + "/api/v1/orders", $scope.address)
+            .then(function successCallback(response) {
+                $scope.address = null;
                 window.alert(
                     "Order has been placed: \r\n" +
                      "id: " + response.data.id + "\r\n" +
@@ -171,8 +209,16 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                     "sum: " + response.data.sum
                 );
                 $scope.fillCart();
+            }, function errorCallback(response) {
+                console.log(response);
             })
     }
 
     $scope.fillProducts();
+    if ($localStorage.demoStoreUsername) {
+        $http.defaults.headers.common.Authorization = $localStorage.demoStoreToken;
+        $scope.fillCart();
+        $scope.username = $localStorage.demoStoreUsername;
+        $scope.authorized = true;
+    }
 });
