@@ -51,12 +51,8 @@ public class AuthController {
             return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Username, password or email is blank"), HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.findByUsername(regRequest.getUsername()).isPresent()) {
-            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "User already exists"), HttpStatus.BAD_REQUEST);
-        }
-
-        if (userService.findUserByEmail(regRequest.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Email already exists"), HttpStatus.BAD_REQUEST);
+        if (userService.checkNewUser(regRequest.getUsername(), regRequest.getEmail())) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Username or Email already exists"), HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(regRequest.getUsername(), regRequest.getPassword(), regRequest.getEmail());

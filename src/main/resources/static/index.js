@@ -10,17 +10,17 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     $scope.username = "";
     var msgTxt = "";
 
-    $scope.tryToAuth = function () {
-        $http.post(contextPath + '/auth', $scope.user)
+    $scope.tryToAuth = function (user) {
+        $http.post(contextPath + '/auth', user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     let receivedToken = 'Bearer ' + response.data.token;
                     $http.defaults.headers.common.Authorization = receivedToken;
-                    $localStorage.demoStoreUsername = $scope.user.username;
+                    $localStorage.demoStoreUsername = user.username;
                     $localStorage.demoStoreToken = receivedToken;
-                    $scope.username = $scope.user.username;
-                    $scope.user.username = null;
-                    $scope.user.password = null;
+                    $scope.username = user.username;
+                    user.username = null;
+                    user.password = null;
                     $scope.authorized = true;
                     $scope.fillCart();
                 }
@@ -41,12 +41,13 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     $scope.regUser = function () {
         $http.post(contextPath + '/reg', $scope.newUser)
             .then(function successCallback() {
-                $scope.user.username = $scope.newUser.username;
-                $scope.user.password = $scope.newUser.password;
+                var user = new Object();
+                user.username = $scope.newUser.username;
+                user.password = $scope.newUser.password;
+                $scope.tryToAuth(user);
                 $scope.newUser.username = null;
                 $scope.newUser.password = null;
                 $scope.newUser.email = null;
-                $scope.tryToAuth();
             }, function errorCallback() {
                 msgTxt = "Registration error";
                 $('#infoModal').modal('show');
