@@ -40,6 +40,7 @@ angular.module('app').controller('cartController', function ($scope, $http, $loc
                 $scope.cartList = response.data.items;
                 $scope.cartQuantity = response.data.quantity;
                 $scope.cartSum = response.data.sum;
+                $scope.cartEmpty();
             })
     }
 
@@ -50,6 +51,7 @@ angular.module('app').controller('cartController', function ($scope, $http, $loc
                 msgTxt = "Заказ №" + response.data.id + " от " + response.data.date + " на сумму " + response.data.sum + " оформлен";
                 $('#infoModal').modal('show');
                 $location.path('/');
+                $scope.fillCart();
             }, function errorCallback(response) {
                 msgTxt = response.data.message;
                 $('#infoModal').modal('show');

@@ -61,6 +61,7 @@ angular.module('app').controller('indexController', function ($scope, $http, $lo
     $scope.authorized = false;
     $scope.username = "";
     let msgTxt = "";
+    $scope.cartTxt = "Корзина";
 
     $scope.tryToAuth = function (user) {
         $http.post(contextPath + '/auth', user)
@@ -109,6 +110,17 @@ angular.module('app').controller('indexController', function ($scope, $http, $lo
         var modal = $(this)
         modal.find('.info-text').text(msgTxt)
     })
+
+    $scope.cartEmpty = function () {
+        $http.get(contextPath + "/api/v1/cart/empty")
+            .then(function (response) {
+                if (response.data === false) {
+                    $scope.cartTxt = "Корзина*";
+                } else {
+                    $scope.cartTxt = "Корзина";
+                }
+            })
+    }
 
     if ($localStorage.demoStoreUsername) {
         $http.defaults.headers.common.Authorization = $localStorage.demoStoreToken;

@@ -47,4 +47,9 @@ public class CartController {
     public void clear() {
         cart.clear();
     }
+
+    @GetMapping("/empty")
+    public boolean isEmpty() {
+        return cart.isEmpty();
+    }
 }

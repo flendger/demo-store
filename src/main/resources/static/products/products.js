@@ -24,7 +24,8 @@ angular.module('app').controller('productsController', function ($scope, $http) 
                 $scope.firstPage = $scope.currentPage;
             }
             $scope.totalPages = response.data.totalPages;
-            $scope.fillPages()
+            $scope.fillPages();
+            $scope.cartEmpty();
         })
     }
 
@@ -84,7 +85,7 @@ angular.module('app').controller('productsController', function ($scope, $http) 
                 quantity: quantity
             }
         }).then(function () {
-
+            $scope.cartEmpty();
         });
     }
 
