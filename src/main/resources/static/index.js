@@ -127,6 +127,10 @@ angular.module('app').controller('indexController', function ($scope, $http, $lo
             })
     }
 
+    $scope.getLocaleDate = function (date) {
+        return new Date(date).toLocaleDateString();
+    }
+
     if ($localStorage.demoStoreUsername) {
         $http.defaults.headers.common.Authorization = $localStorage.demoStoreToken;
         $scope.username = $localStorage.demoStoreUsername;

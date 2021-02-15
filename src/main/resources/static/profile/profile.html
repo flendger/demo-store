@@ -15,7 +15,7 @@
             <tbody>
                 <tr ng-repeat="order in orderList">
                     <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.id}}</a></td>
-                    <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.date}}</a></td>
+                    <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{getLocaleDate(order.date)}}</a></td>
                     <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.sum}}</a></td>
                 </tr>
             </tbody>

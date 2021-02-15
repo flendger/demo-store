@@ -1,4 +1,4 @@
-angular.module('app').controller('profileController', function ($scope, $http, $location) {
+angular.module('app').controller('profileController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/store';
     let msgTxt = "";
 

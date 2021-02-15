@@ -48,7 +48,7 @@ angular.module('app').controller('cartController', function ($scope, $http, $loc
         $http.post(contextPath + "/api/v1/orders", $scope.address)
             .then(function successCallback(response) {
                 $scope.address = null;
-                msgTxt = "Заказ №" + response.data.id + " от " + response.data.date + " на сумму " + response.data.sum + " оформлен";
+                msgTxt = "Заказ №" + response.data.id + " от " + $scope.getLocaleDate(response.data.date) + " на сумму " + response.data.sum + " оформлен";
                 $('#infoModal').modal('show');
                 $location.path('/');
                 $scope.fillCart();
@@ -56,6 +56,20 @@ angular.module('app').controller('cartController', function ($scope, $http, $loc
                 msgTxt = response.data.message;
                 $('#infoModal').modal('show');
             })
+    }
+
+    $scope.addToCart = function (id, quantity) {
+        $http({
+            url: contextPath + '/api/v1/cart/add',
+            method: 'GET',
+            params: {
+                id: id,
+                quantity: quantity
+            }
+        }).then(function () {
+            $scope.cartEmpty();
+            $scope.fillCart();
+        });
     }
 
     $('#infoModal').on('show.bs.modal', function () {
