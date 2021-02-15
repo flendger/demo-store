@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="form-group">
+    <h5>Ваши заказы</h5>
 
-</body>
-</html>
+    <p ng-show="orderList.length === 0">У вас нет оформленных заказов</p>
+
+    <div class="container" ng-show="orderList.length != 0">
+        <table cellpadding="0" cellspacing="0" class="table table-hover">
+            <thead class="thead-dark">
+                <tr align="center">
+                    <th>№</th>
+                    <th>Дата</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="order in orderList">
+                    <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.id}}</a></td>
+                    <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.date}}</a></td>
+                    <td class="text-center"><a class="nav-link active" href="#!order/{{order.id}}">{{order.sum}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -20,9 +20,13 @@
                 templateUrl: 'cart/cart.html',
                 controller: 'cartController'
             })
-            .when('/orders', {
-                templateUrl: 'orders/orders.html',
-                controller: 'ordersController'
+            .when('/order/:id', {
+                templateUrl: 'order/order.html',
+                controller: 'orderController'
+            })
+            .when('/profile', {
+                templateUrl: 'profile/profile.html',
+                controller: 'profileController'
             })
             .otherwise({
                 redirectTo: '/'
@@ -55,7 +59,7 @@
     }
 })();
 
-angular.module('app').controller('indexController', function ($scope, $http, $localStorage) {
+angular.module('app').controller('indexController', function ($scope, $http, $localStorage, $location) {
 
     const contextPath = 'http://localhost:8189/store';
     $scope.authorized = false;
@@ -88,6 +92,7 @@ angular.module('app').controller('indexController', function ($scope, $http, $lo
         delete $localStorage.demoStoreUsername;
         $scope.username = null;
         $scope.authorized = false;
+        $location.path('/');
     }
 
     $scope.regUser = function () {

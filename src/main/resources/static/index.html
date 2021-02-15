@@ -14,6 +14,8 @@
     <script src="index.js"></script>
     <script src="products/products.js"></script>
     <script src="cart/cart.js"></script>
+    <script src="profile/profile.js"></script>
+    <script src="order/order.js"></script>
     <title>Магазин товаров для животных</title>
 </head>
 <body>
@@ -27,7 +29,7 @@
         </div>
         <div class="form-inline" ng-show="authorized">
             <a class="btn btn-outline-success my-2 mr-sm-2" href="#!/cart">{{cartTxt}}</a>
-            <button class="btn btn-outline-success my-2 mr-sm-2" ng-click="">{{username}}</button>
+            <a class="btn btn-outline-success my-2 mr-sm-2" href="#!profile">{{username}}</a>
             <button type="button" class="btn btn-outline-success my-2 my-sm-0" ng-click="logout()">Выйти</button>
         </div>
     </nav>
