@@ -16,6 +16,10 @@
                 templateUrl: 'products/products.html',
                 controller: 'productsController'
             })
+            .when('/card/:id', {
+                templateUrl: 'card/card.html',
+                controller: 'cardController'
+            })
             .when('/cart', {
                 templateUrl: 'cart/cart.html',
                 controller: 'cartController'
@@ -121,6 +125,19 @@ angular.module('app').controller('indexController', function ($scope, $http, $lo
             .then(function (response) {
                 $scope.cartSize = response.data;
             })
+    }
+
+    $scope.addToCart = function (id, quantity) {
+        $http({
+            url: contextPath + '/api/v1/cart/add',
+            method: 'GET',
+            params: {
+                id: id,
+                quantity: quantity
+            }
+        }).then(function () {
+            $scope.cartEmpty();
+        });
     }
 
     $scope.getLocaleDate = function (date) {

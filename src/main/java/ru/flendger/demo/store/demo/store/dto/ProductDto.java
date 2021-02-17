@@ -10,6 +10,7 @@ public class ProductDto {
     private Long id;
     private String article;
     private String title;
+    private String description;
     private int price;
     private float score;
 
@@ -21,6 +22,7 @@ public class ProductDto {
         this.id = product.getId();
         this.article = product.getArticle();
         this.title = product.getTitle();
+        this.description = product.getDescription();
         this.price = product.getPrice();
         this.score = product.getScore();
         return this;

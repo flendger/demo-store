@@ -19,8 +19,8 @@
             <tbody>
             <tr ng-repeat="item in cartList">
                 <th class="text-center" scope="row">{{$index + 1}}</th>
-                <td align="center">{{item.productDto.article}}</td>
-                <td>{{item.productDto.title}}</td>
+                <td align="center"><a href="#!card/{{item.productDto.id}}">{{item.productDto.article}}</a></td>
+                <td><a href="#!card/{{item.productDto.id}}">{{item.productDto.title}}</a></td>
                 <td align="center">{{item.price}}</td>
                 <td class="row justify-content-center">
                     <div class="input-group mb-3 row justify-content-center">

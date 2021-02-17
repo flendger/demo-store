@@ -76,18 +76,5 @@ angular.module('app').controller('productsController', function ($scope, $http) 
         return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
     }
 
-    $scope.addToCart = function (id, quantity) {
-        $http({
-            url: contextPath + '/api/v1/cart/add',
-            method: 'GET',
-            params: {
-                id: id,
-                quantity: quantity
-            }
-        }).then(function () {
-            $scope.cartEmpty();
-        });
-    }
-
     $scope.fillProducts();
 });

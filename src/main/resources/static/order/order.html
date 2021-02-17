@@ -8,6 +8,7 @@
             <thead class="thead-dark">
             <tr class="text-center">
                 <th>№</th>
+                <th>Артикул</th>
                 <th class="w-50">Название</th>
                 <th>Цена</th>
                 <th>Количество</th>
@@ -17,13 +18,14 @@
             <tbody>
             <tr ng-repeat="item in order.orderItemDtos">
                 <th class="text-center" scope="row">{{$index + 1}}</th>
-                <td>{{item.productDto.title}}</td>
+                <td class="text-center"><a href="#!card/{{item.productDto.id}}">{{item.productDto.article}}</a></td>
+                <td><a href="#!card/{{item.productDto.id}}">{{item.productDto.title}}</a></td>
                 <td class="text-center">{{item.price}}</td>
                 <td class="text-center">{{item.quantity}}</td>
                 <td class="text-center">{{item.sum}}</td>
             </tr>
             <tr class="table-active">
-                <th colspan="4" class="text-right">ИТОГО:</th>
+                <th colspan="5" class="text-right">ИТОГО:</th>
                 <th class="text-center">{{order.sum}}</th>
             </tr>
             </tbody>

@@ -35,8 +35,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="p in productList">
-            <td class="text-center">{{p.article}}</td>
-            <td>{{p.title}}</td>
+            <td class="text-center"><a href="#!card/{{p.id}}">{{p.article}}</a></td>
+            <td><a href="#!card/{{p.id}}">{{p.title}}</a></td>
             <td class="text-center">{{p.price}}</td>
             <td class="text-center">{{p.score}}</td>
             <td align="center">
