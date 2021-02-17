@@ -8,7 +8,8 @@
             <thead class="thead-dark">
             <tr align="center">
                 <th>№</th>
-                <th>Название</th>
+                <th>Артикул</th>
+                <th class="w-50">Название</th>
                 <th>Цена</th>
                 <th>Количество</th>
                 <th>Сумма</th>
@@ -18,6 +19,7 @@
             <tbody>
             <tr ng-repeat="item in cartList">
                 <th class="text-center" scope="row">{{$index + 1}}</th>
+                <td align="center">{{item.productDto.article}}</td>
                 <td>{{item.productDto.title}}</td>
                 <td align="center">{{item.price}}</td>
                 <td class="row justify-content-center">
@@ -38,7 +40,7 @@
                 </td>
             </tr>
             <tr class="table-active">
-                <th colspan="3" class="text-right">ИТОГО:</th>
+                <th colspan="4" class="text-right">ИТОГО:</th>
                 <th class="text-center">{{cartQuantity}}</th>
                 <th class="text-center">{{cartSum}}</th>
                 <th class="text-center">

@@ -26,18 +26,21 @@
     <table cellpadding="0" cellspacing="0" class="table table-hover">
         <thead class="thead-light">
         <tr>
-            <th>Название</th>
-            <th>Цена</th>
+            <th class="text-center">Артикул</th>
+            <th class="text-center w-50">Название</th>
+            <th class="text-center">Цена</th>
+            <th class="text-center">Оценка</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="p in productList">
+            <td class="text-center">{{p.article}}</td>
             <td>{{p.title}}</td>
-            <td>{{p.price}}</td>
-            <td align="right">
+            <td class="text-center">{{p.price}}</td>
+            <td class="text-center">{{p.score}}</td>
+            <td align="center">
                 <button class="btn btn-success" ng-click="addToCart(p.id)">В корзину</button>
-                <!--                    <button class="btn btn-danger" ng-click="delete(p.id)">Удалить</button>-->
             </td>
         </tr>
         </tbody>

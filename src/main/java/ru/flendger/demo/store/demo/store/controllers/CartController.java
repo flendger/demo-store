@@ -48,8 +48,8 @@ public class CartController {
         cart.clear();
     }
 
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return cart.isEmpty();
+    @GetMapping("/size")
+    public int getSize() {
+        return cart.getItems().size();
     }
 }

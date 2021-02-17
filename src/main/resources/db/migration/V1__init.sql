@@ -37,33 +37,35 @@ VALUES (1, 1),
 CREATE TABLE products
 (
     id         bigserial PRIMARY KEY,
+    article    varchar(20) not null,
     title      varchar(255),
-    price      int,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp
+    price      int           default 0,
+    avg_score  numeric(2, 1) default 5,
+    created_at timestamp     default current_timestamp,
+    updated_at timestamp     default current_timestamp
 );
 
-INSERT INTO products (title, price)
-VALUES ('product_1', 1),
-       ('product_2', 2),
-       ('product_3', 3),
-       ('product_4', 4),
-       ('product_5', 5),
-       ('product_6', 6),
-       ('product_7', 7),
-       ('product_8', 8),
-       ('product_9', 9),
-       ('product_10', 10),
-       ('product_11', 11),
-       ('product_12', 12),
-       ('product_13', 13),
-       ('product_14', 14),
-       ('product_15', 15),
-       ('product_16', 16),
-       ('product_17', 17),
-       ('product_18', 18),
-       ('product_19', 19),
-       ('product_20', 20);
+INSERT INTO products (article, title, price)
+VALUES ('12344', 'product_1', 1),
+       ('54345', 'product_2', 2),
+       ('32455', 'product_3', 3),
+       ('23456', 'product_4', 4),
+       ('84676', 'product_5', 5),
+       ('12256', 'product_6', 6),
+       ('67544', 'product_7', 7),
+       ('55637', 'product_8', 8),
+       ('88766', 'product_9', 9),
+       ('13434', 'product_10', 10),
+       ('44532', 'product_11', 11),
+       ('86788', 'product_12', 12),
+       ('00986', 'product_13', 13),
+       ('11467', 'product_14', 14),
+       ('47367', 'product_15', 15),
+       ('27654', 'product_16', 16),
+       ('98987', 'product_17', 17),
+       ('92347', 'product_18', 18),
+       ('83867', 'product_19', 19),
+       ('33478', 'product_20', 20);
 
 CREATE TABLE order_addresses
 (

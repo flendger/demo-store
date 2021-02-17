@@ -20,11 +20,17 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "article")
+    private String article;
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "price")
     private int price;
+
+    @Column(name = "avg_score")
+    private float score;
 
     @Column(name = "created_at")
     @CreationTimestamp
