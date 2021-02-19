@@ -37,7 +37,7 @@ VALUES (1, 1),
 CREATE TABLE products
 (
     id          bigserial PRIMARY KEY,
-    article     varchar(20) not null,
+    article     varchar(20)  not null,
     title       varchar(255) not null,
     description varchar(1000),
     price       int           default 0,
@@ -96,6 +96,18 @@ CREATE TABLE order_items
     quantity   int       default 0,
     price      int       default 0,
     sum        int       default 0,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
+);
+
+CREATE TABLE comments
+(
+    id         bigserial primary key,
+    user_id    bigint       not null references users (id),
+    product_id bigint       not null references products (id),
+    username   varchar(150) not null,
+    score      int       default 0,
+    comment    varchar(1024),
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
 );

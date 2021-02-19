@@ -30,49 +30,48 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active overflow-auto" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-            <div class="card">
+            <div class="card" ng-repeat="c in commentList">
                 <div class="card-header">
-                    Quote
+                    {{c.username}}
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        <p>A well-known quote, contained in a blockquote element.</p>
-                        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source
-                            Title</cite></footer>
+                        <p>{{c.comment}}</p>
+                        <footer class="blockquote-footer">Оценка: {{c.score === 0 ? 'нет оценки' : c.score}}</footer>
                     </blockquote>
                 </div>
             </div>
         </div>
         <div class="tab-pane" id="add-comment" role="tabpanel" aria-labelledby="add-comment-tab">
-            <form>
+            <form ng-submit="placeNewComment()">
                 <div class="form-group">
                     <label for="nameInput">Имя</label>
-                    <input type="text" class="form-control" id="nameInput" placeholder="Введите имя">
+                    <input type="text" class="form-control" ng-model="newComment.username" id="nameInput" placeholder="Введите имя">
                 </div>
                 <div class="form-group">
                     <label for="textInput">Отзыв</label>
-                    <textarea class="form-control" id="textInput" rows="5" placeholder="Напишите отзыв"></textarea>
+                    <textarea class="form-control" ng-model="newComment.comment" id="textInput" rows="5" placeholder="Напишите отзыв"></textarea>
                 </div>
 
                 <div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <input class="form-check-input" ng-click="newComment.score=1" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
                         <label class="form-check-label" for="inlineRadio1">1</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <input class="form-check-input" ng-click="newComment.score=2" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
                         <label class="form-check-label" for="inlineRadio2">2</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                        <input class="form-check-input" ng-click="newComment.score=3" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
                         <label class="form-check-label" for="inlineRadio3">3</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3">
+                        <input class="form-check-input" ng-click="newComment.score=4" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3">
                         <label class="form-check-label" for="inlineRadio4">4</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option3">
+                        <input class="form-check-input" ng-click="newComment.score=5" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option3">
                         <label class="form-check-label" for="inlineRadio5">5</label>
                     </div>
                 </div>
