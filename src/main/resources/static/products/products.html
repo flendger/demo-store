@@ -1,0 +1,62 @@
+<form novalidate ng-submit="filterProducts()">
+    <h5>Фильтр</h5>
+    <div class="form-group row">
+        <div class="col">
+            <input class="form-control" type="text" placeholder="Название" ng-model="productFilter.title" id="filterTitle">
+        </div>
+        <div class="col">
+            <input class="form-control" type="number" placeholder="Мин. цена" ng-model="productFilter.minPrice"
+                   id="filterMinPrice">
+        </div>
+        <div class="col">
+            <input class="form-control" type="number" placeholder="Макс. цена" ng-model="productFilter.maxPrice"
+                   id="filterMaxPrice">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button class="btn btn-danger" type="submit">Применить</button>
+            <button class="btn btn-danger" ng-click="clearFilter()">Очистить</button>
+        </div>
+    </div>
+</form>
+
+<div class="form-group">
+    <h5>Список товаров</h5>
+    <table cellpadding="0" cellspacing="0" class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th class="text-center">Артикул</th>
+            <th class="text-center w-50">Название</th>
+            <th class="text-center">Цена</th>
+            <th class="text-center">Оценка</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="p in productList">
+            <td class="text-center"><a href="#!card/{{p.id}}">{{p.article}}</a></td>
+            <td><a href="#!card/{{p.id}}">{{p.title}}</a></td>
+            <td class="text-center">{{p.price}}</td>
+            <td class="text-center">{{p.score}}</td>
+            <td align="center">
+                <button class="btn btn-success" ng-click="addToCart(p.id)">В корзину</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item" ng-class="firstPage === 1 ? 'disabled' : ''">
+            <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="prevPages()">Пред.</a>
+        </li>
+        <li class="page-item" ng-class="page === currentPage ? 'active' : ''" ng-repeat="page in printPages">
+            <a class="page-link" ng-click="toPage(page)">{{page}}</a>
+        </li>
+        <li class="page-item" ng-class="getLastPage() >= totalPages ? 'disabled' : ''">
+            <a class="page-link" tabindex="-1" aria-disabled="true" ng-click="nextPages()">След.</a>
+        </li>
+    </ul>
+</nav>

@@ -1,6 +1,5 @@
 package ru.flendger.demo.store.demo.store.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,30 +9,31 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "comments")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Product {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "article")
-    private String article;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "title")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "price")
-    private int price;
+    @Column(name = "comment")
+    private String comment;
 
-    @Column(name = "avg_score")
-    private float score;
+    @Column(name = "score")
+    private int score;
 
     @Column(name = "created_at")
     @CreationTimestamp

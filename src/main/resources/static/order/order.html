@@ -1,0 +1,54 @@
+<div class="form-group">
+    <div class="container" ng-show="true">
+        <h5>Заказ №{{order.id}} от {{order.date}}</h5>
+
+        <p ng-show="false">Заказ не найден</p>
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr class="text-center">
+                <th>№</th>
+                <th>Артикул</th>
+                <th class="w-50">Название</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in order.orderItemDtos">
+                <th class="text-center" scope="row">{{$index + 1}}</th>
+                <td class="text-center"><a href="#!card/{{item.productDto.id}}">{{item.productDto.article}}</a></td>
+                <td><a href="#!card/{{item.productDto.id}}">{{item.productDto.title}}</a></td>
+                <td class="text-center">{{item.price}}</td>
+                <td class="text-center">{{item.quantity}}</td>
+                <td class="text-center">{{item.sum}}</td>
+            </tr>
+            <tr class="table-active">
+                <th colspan="5" class="text-right">ИТОГО:</th>
+                <th class="text-center">{{order.sum}}</th>
+            </tr>
+            </tbody>
+        </table>
+        <h7><b>Адрес доставки: </b>{{order.orderAddressDto.address}}</h7>
+    </div>
+</div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Информация</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="info-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>

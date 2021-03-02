@@ -35,10 +35,6 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
-    public Optional<User> findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }
-
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
@@ -47,5 +43,9 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         roleService.findRoleByName("ROLE_USER").ifPresent(role -> user.getRoles().add(role));
         return userRepository.save(user);
+    }
+
+    public boolean checkNewUser(String username, String email) {
+        return userRepository.checkUsernameEmail(username, email);
     }
 }

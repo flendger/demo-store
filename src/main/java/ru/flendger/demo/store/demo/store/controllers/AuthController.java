@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +33,8 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody JwtRequest jwtRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword()));
-        } catch (BadCredentialsException ex) {
-            return new ResponseEntity<>(new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Incorrect username or password"), HttpStatus.UNAUTHORIZED);
+        } catch (AuthenticationException ex) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Неверное имя пользователя или пароль"), HttpStatus.UNAUTHORIZED);
         }
 
         UserDetails userDetails = userService.loadUserByUsername(jwtRequest.getUsername());
@@ -51,12 +52,8 @@ public class AuthController {
             return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Username, password or email is blank"), HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.findByUsername(regRequest.getUsername()).isPresent()) {
-            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "User already exists"), HttpStatus.BAD_REQUEST);
-        }
-
-        if (userService.findUserByEmail(regRequest.getEmail()).isPresent()) {
-            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Email already exists"), HttpStatus.BAD_REQUEST);
+        if (userService.checkNewUser(regRequest.getUsername(), regRequest.getEmail())) {
+            return new ResponseEntity<>(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), "Username or Email already exists"), HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(regRequest.getUsername(), regRequest.getPassword(), regRequest.getEmail());

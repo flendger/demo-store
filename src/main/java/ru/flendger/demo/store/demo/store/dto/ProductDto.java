@@ -8,8 +8,11 @@ import ru.flendger.demo.store.demo.store.model.Product;
 @NoArgsConstructor
 public class ProductDto {
     private Long id;
+    private String article;
     private String title;
+    private String description;
     private int price;
+    private float score;
 
     public ProductDto(Product product) {
         formProduct(product);
@@ -17,8 +20,11 @@ public class ProductDto {
 
     public ProductDto formProduct(Product product) {
         this.id = product.getId();
+        this.article = product.getArticle();
         this.title = product.getTitle();
+        this.description = product.getDescription();
         this.price = product.getPrice();
+        this.score = product.getScore();
         return this;
     }
 }

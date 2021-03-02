@@ -47,4 +47,9 @@ public class CartController {
     public void clear() {
         cart.clear();
     }
+
+    @GetMapping("/size")
+    public int getSize() {
+        return cart.getItems().size();
+    }
 }

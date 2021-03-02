@@ -1,31 +1,91 @@
-angular.module('app', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
+(function () {
+    'use strict';
+
+    angular
+        .module('app', ['ngRoute', 'ngStorage'])
+        .config(config)
+        .run(run);
+
+    function config($routeProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl: 'products/products.html',
+                controller: 'productsController'
+            })
+            .when('/products', {
+                templateUrl: 'products/products.html',
+                controller: 'productsController'
+            })
+            .when('/card/:id', {
+                templateUrl: 'card/card.html',
+                controller: 'cardController'
+            })
+            .when('/cart', {
+                templateUrl: 'cart/cart.html',
+                controller: 'cartController'
+            })
+            .when('/order/:id', {
+                templateUrl: 'order/order.html',
+                controller: 'orderController'
+            })
+            .when('/profile', {
+                templateUrl: 'profile/profile.html',
+                controller: 'profileController'
+            })
+            .otherwise({
+                redirectTo: '/'
+            });
+
+        // $httpProvider.interceptors.push(function ($q, $location) {
+        //     return {
+        //         'responseError': function (rejection, $localStorage, $http) {
+        //             var defer = $q.defer();
+        //             if (rejection.status == 401 || rejection.status == 403) {
+        //                 console.log('error: 401-403');
+        //                 $location.path('/auth');
+        //                 if (!(localStorage.getItem("localUser") === null)) {
+        //                     delete $localStorage.currentUser;
+        //                     $http.defaults.headers.common.Authorization = '';
+        //                 }
+        //                 console.log(rejection.data);
+        //                 var answer = JSON.parse(rejection.data);
+        //                 console.log(answer);
+        //                 // window.alert(answer.message);
+        //             }
+        //             defer.reject(rejection);
+        //             return defer.promise;
+        //         }
+        //     };
+        // });
+    }
+
+    function run($rootScope, $http, $localStorage) {
+    }
+})();
+
+angular.module('app').controller('indexController', function ($scope, $http, $localStorage, $location) {
 
     const contextPath = 'http://localhost:8189/store';
-    const pageSize = 5;
-    const maxPages = 8;
-    $scope.currentPage = 1;
-    $scope.totalPages = 1;
-    $scope.firstPage = 1;
     $scope.authorized = false;
     $scope.username = "";
-    var msgTxt = "";
+    let msgTxt = "";
+    $scope.cartSize = 0;
 
-    $scope.tryToAuth = function () {
-        $http.post(contextPath + '/auth', $scope.user)
+    $scope.tryToAuth = function (user) {
+        $http.post(contextPath + '/auth', user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     let receivedToken = 'Bearer ' + response.data.token;
                     $http.defaults.headers.common.Authorization = receivedToken;
-                    $localStorage.demoStoreUsername = $scope.user.username;
+                    $localStorage.demoStoreUsername = user.username;
                     $localStorage.demoStoreToken = receivedToken;
-                    $scope.username = $scope.user.username;
-                    $scope.user.username = null;
-                    $scope.user.password = null;
+                    $scope.username = user.username;
+                    user.username = null;
+                    user.password = null;
                     $scope.authorized = true;
-                    $scope.fillCart();
                 }
-            }, function errorCallback() {
-                msgTxt = "Authentication error";
+            }, function errorCallback(response) {
+                msgTxt = response.data.message;
                 $('#infoModal').modal('show');
             });
     };
@@ -36,19 +96,21 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         delete $localStorage.demoStoreUsername;
         $scope.username = null;
         $scope.authorized = false;
+        $location.path('/');
     }
 
     $scope.regUser = function () {
         $http.post(contextPath + '/reg', $scope.newUser)
             .then(function successCallback() {
-                $scope.user.username = $scope.newUser.username;
-                $scope.user.password = $scope.newUser.password;
+                var user = {};
+                user.username = $scope.newUser.username;
+                user.password = $scope.newUser.password;
+                $scope.tryToAuth(user);
                 $scope.newUser.username = null;
                 $scope.newUser.password = null;
                 $scope.newUser.email = null;
-                $scope.tryToAuth();
-            }, function errorCallback() {
-                msgTxt = "Registration error";
+            }, function errorCallback(response) {
+                msgTxt = response.data.message;
                 $('#infoModal').modal('show');
             });
     }
@@ -58,49 +120,11 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         modal.find('.info-text').text(msgTxt)
     })
 
-    $scope.fillProducts = function () {
-        $http({
-            url: contextPath + '/api/v1/products',
-            method: 'GET',
-            params: {
-                page: $scope.currentPage-1,
-                size: pageSize,
-                min: $scope.productFilter ? $scope.productFilter.minPrice : null,
-                max: $scope.productFilter ? $scope.productFilter.maxPrice : null,
-                title: $scope.productFilter ? $scope.productFilter.title : null
-            }
-        }).then(function (response) {
-            $scope.productList = response.data.content;
-            $scope.currentPage = response.data.number + 1;
-            if ($scope.firstPage > $scope.currentPage) {
-                $scope.firstPage = $scope.currentPage;
-            }
-            $scope.totalPages = response.data.totalPages;
-            $scope.fillPages()
-        })
-    }
-
-    $scope.filterProducts = function () {
-        $scope.currentPage = 1;
-        $scope.fillProducts();
-    }
-
-    $scope.delete = function (id) {
-        $http({
-            url: contextPath + '/api/v1/products',
-            method: 'DELETE',
-            params: {
-                id: id
-            }
-        }).then($scope.fillProducts);
-    }
-
-    $scope.submitCreateNewProduct = function () {
-        $http.post(contextPath + '/api/v1/products', $scope.newProduct)
-            .then(function (){
-                $scope.newProduct = null;
-                $scope.fillProducts();
-            });
+    $scope.cartEmpty = function () {
+        $http.get(contextPath + "/api/v1/cart/size")
+            .then(function (response) {
+                $scope.cartSize = response.data;
+            })
     }
 
     $scope.addToCart = function (id, quantity) {
@@ -112,112 +136,16 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                 quantity: quantity
             }
         }).then(function () {
-            $scope.fillCart();
+            $scope.cartEmpty();
         });
     }
 
-    $scope.decFromCart = function (id, quantity) {
-        $http({
-            url: contextPath + '/api/v1/cart/remove',
-            method: 'GET',
-            params: {
-                id: id,
-                quantity: quantity
-            }
-        }).then(function () {
-            $scope.fillCart();
-        });
+    $scope.getLocaleDate = function (date) {
+        return new Date(date).toLocaleDateString();
     }
 
-    $scope.deleteFromCart = function (id) {
-        $http({
-            url: contextPath + '/api/v1/cart/delete',
-            method: 'GET',
-            params: {
-                id: id
-            }
-        }).then(function () {
-            $scope.fillCart();
-        });
-    }
-
-    $scope.clearCart = function () {
-        $http.get(contextPath + "/api/v1/cart/clear")
-            .then(function () {
-                $scope.fillCart();
-            })
-    }
-
-    $scope.fillCart = function () {
-        $http.get(contextPath + "/api/v1/cart")
-            .then(function (response) {
-                $scope.cartList = response.data.items;
-                $scope.cartQuantity = response.data.quantity;
-                $scope.cartSum = response.data.sum;
-            })
-    }
-
-    $scope.fillPages = function () {
-        let printPages = [];
-        let mPages = Math.min(maxPages, $scope.totalPages);
-        for (let i = 0; i < mPages; i++) {
-            printPages.push(i + $scope.firstPage);
-        }
-
-        $scope.printPages = printPages;
-    }
-
-    $scope.toPage = function (page) {
-        $scope.currentPage = page;
-        $scope.fillProducts();
-    }
-
-    $scope.prevPages = function () {
-        if ($scope.firstPage === 1) return;
-        $scope.firstPage --;
-        if ($scope.currentPage > $scope.getLastPage()) {
-            $scope.currentPage = $scope.getLastPage();
-        }
-        $scope.fillProducts();
-    }
-
-    $scope.nextPages = function () {
-        if ($scope.getLastPage() >= $scope.totalPages) return;
-        $scope.firstPage ++;
-        if ($scope.currentPage < $scope.firstPage) {
-            $scope.currentPage = $scope.firstPage;
-        }
-        $scope.fillProducts();
-    }
-
-    $scope.getLastPage = function() {
-        return $scope.firstPage + Math.min(maxPages, $scope.totalPages);
-    }
-
-    $scope.inputAddress = function () {
-        $('#addressModal').modal('show');
-    }
-
-    $scope.placeOrder = function () {
-        $http.post(contextPath + "/api/v1/orders", $scope.address)
-            .then(function successCallback(response) {
-                $scope.address = null;
-                window.alert(
-                    "Order has been placed: \r\n" +
-                     "id: " + response.data.id + "\r\n" +
-                     "date: " + response.data.date + "\r\n" +
-                    "sum: " + response.data.sum
-                );
-                $scope.fillCart();
-            }, function errorCallback(response) {
-                console.log(response);
-            })
-    }
-
-    $scope.fillProducts();
     if ($localStorage.demoStoreUsername) {
         $http.defaults.headers.common.Authorization = $localStorage.demoStoreToken;
-        $scope.fillCart();
         $scope.username = $localStorage.demoStoreUsername;
         $scope.authorized = true;
     }
