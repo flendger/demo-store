@@ -11,8 +11,12 @@ import ru.flendger.demo.store.demo.store.exeptions.ResourceNotFoundException;
 import ru.flendger.demo.store.demo.store.model.Product;
 import ru.flendger.demo.store.demo.store.repositories.CommentRepository;
 import ru.flendger.demo.store.demo.store.repositories.ProductRepository;
+import ru.flendger.demo.store.demo.store.ws.products.ProductXmlDto;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +25,22 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CommentRepository commentRepository;
 
+    private final static Function<Product, ProductXmlDto> PRODUCT_TO_PRODUCT_XML_DTO = p -> {
+        ProductXmlDto pXml = new ProductXmlDto();
+        pXml.setId(p.getId());
+        pXml.setArticle(p.getArticle());
+        pXml.setTitle(p.getTitle());
+        pXml.setDescription(p.getDescription());
+        pXml.setPrice(p.getPrice());
+        return pXml;
+    };
+
     public Page<ProductDto> findAll(Specification<Product> spec, int page, int size) {
         return productRepository.findAll(spec, PageRequest.of(page, size)).map(ProductDto::new);
+    }
+
+    public List<ProductXmlDto> findAllProductXmlDto() {
+        return productRepository.findAll().stream().map(PRODUCT_TO_PRODUCT_XML_DTO).collect(Collectors.toList());
     }
 
     public Optional<ProductDto> findProductDtoById(Long id) {
