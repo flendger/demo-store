@@ -80,10 +80,10 @@ CREATE TABLE order_addresses
 CREATE TABLE orders
 (
     id         bigserial PRIMARY KEY,
-    date       date   not null,
-    user_id    bigint not null references users (id),
+    date       date   ,
+    user_id    bigint  references users (id),
     sum        int       default 0,
-    address_id bigint not null references order_addresses (id),
+    address_id bigint references order_addresses (id),
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
 );
@@ -110,4 +110,11 @@ CREATE TABLE comments
     comment    varchar(1024),
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
+);
+
+create table additional_texts
+(
+    id       bigserial primary key,
+    order_id bigint references orders (id),
+    text     varchar
 );

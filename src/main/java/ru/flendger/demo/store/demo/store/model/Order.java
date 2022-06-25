@@ -34,6 +34,9 @@ public class Order {
     @JoinColumn(name = "address_id")
     private OrderAddress orderAddress;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<AdditionalText> additionalTexts;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;

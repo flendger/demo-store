@@ -1,10 +1,12 @@
 package ru.flendger.demo.store.demo.store.services;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.flendger.demo.store.demo.store.dto.OrderDto;
 import ru.flendger.demo.store.demo.store.dto.OrderDtoWithItems;
+import ru.flendger.demo.store.demo.store.model.AdditionalText;
 import ru.flendger.demo.store.demo.store.model.Order;
 import ru.flendger.demo.store.demo.store.repositories.OrderRepository;
 
@@ -38,5 +40,24 @@ public class OrderService {
 
     public Order save(Order order) {
         return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order findById(Long id) {
+        Order order = orderRepository.findById(id).get();
+        Hibernate.initialize(order.getAdditionalTexts());
+        return order;
+    }
+
+    @Transactional
+    public void clearTextsAndSave(Long id) {
+        Order order = orderRepository.getOne(id);
+        List<AdditionalText> additionalTexts = order.getAdditionalTexts();
+        for (AdditionalText additionalText : additionalTexts) {
+            additionalText.setOrder(null);
+        }
+
+//        additionalTexts.clear();
+//        orderRepository.save(order);
     }
 }
